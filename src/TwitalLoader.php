@@ -11,7 +11,7 @@ use Goetas\Twital\SourceAdapter\XMLAdapter;
  *
  * @author Asmir Mustafic <goetas@gmail.com>
  */
-class TwitalLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface, \Twig_SourceContextLoaderInterface
+class TwitalLoader implements \Twig\LoaderInterface, \Twig\ExistsLoaderInterface, \Twig\SourceContextLoaderInterface
 {
     /**
      * Array of patterns used to decide if a template is twital-compilable or not.
@@ -24,7 +24,7 @@ class TwitalLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
     /**
      * The wrapped Twig loader
      *
-     * @var \Twig_LoaderInterface
+     * @var \Twig\LoaderInterface
      */
     protected $loader;
 
@@ -37,11 +37,11 @@ class TwitalLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
 
     /**
      * Creates a new Twital loader.
-     * @param \Twig_LoaderInterface $loader
+     * @param \Twig\LoaderInterface $loader
      * @param Twital $twital
      * @param bool $addDefaults If NULL, some standard rules will be used (`*.twital.*` and `*.twital`).
      */
-    public function __construct(\Twig_LoaderInterface $loader = null, Twital $twital = null, $addDefaults = true)
+    public function __construct(\Twig\LoaderInterface $loader = null, Twital $twital = null, $addDefaults = true)
     {
         $this->loader = $loader;
         $this->twital = $twital;
@@ -59,20 +59,15 @@ class TwitalLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
 
     public function getSourceContext($name)
     {
-        if (\Twig_Environment::MAJOR_VERSION === 2 || $this->loader instanceof \Twig_SourceContextLoaderInterface) {
-            $originalContext = $this->loader->getSourceContext($name);
-            $code = $originalContext->getCode();
-            $path = $originalContext->getPath();
-        } else {
-            $code = $this->loader->getSource($name);
-            $path = null;
-        }
+        $originalContext = $this->loader->getSourceContext($name);
+        $code = $originalContext->getCode();
+        $path = $originalContext->getPath();
 
         if ($adapter = $this->getSourceAdapter($name)) {
             $code = $this->getTwital()->compile($adapter, $code);
         }
 
-        return new \Twig_Source($code, $name, $path);
+        return new \Twig\Source($code, $name, $path);
     }
 
     /**
@@ -147,23 +142,13 @@ class TwitalLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
      */
     public function exists($name)
     {
-        if (\Twig_Environment::MAJOR_VERSION === 2 || $this->loader instanceof \Twig_ExistsLoaderInterface) {
-            return $this->loader->exists($name);
-        } else {
-            try {
-                $this->getSourceContext($name);
-
-                return true;
-            } catch (\Twig_Error_Loader $e) {
-                return false;
-            }
-        }
+        return $this->loader->exists($name);
     }
 
     /**
      * Get the wrapped Twig loader
      *
-     * @return \Twig_LoaderInterface
+     * @return \Twig\LoaderInterface
      */
     public function getLoader()
     {
@@ -173,10 +158,10 @@ class TwitalLoader implements \Twig_LoaderInterface, \Twig_ExistsLoaderInterface
     /**
      * Set the wrapped Twig loader
      *
-     * @param \Twig_LoaderInterface $loader
+     * @param \Twig\LoaderInterface $loader
      * @return TwitalLoader
      */
-    public function setLoader(\Twig_LoaderInterface $loader)
+    public function setLoader(\Twig\LoaderInterface $loader)
     {
         $this->loader = $loader;
 
