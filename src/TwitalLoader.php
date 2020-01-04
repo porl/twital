@@ -59,9 +59,8 @@ class TwitalLoader implements \Twig\Loader\LoaderInterface
 
     public function getSourceContext($name)
     {
-	/* TODO: PORL!!!! */
-        die($this->loader->getSourceContext($name));
-        return $this->loader->getSourceContext($name);
+	return new \Twig\Source("hello", "hello", "hello");
+
         $originalContext = $this->loader->getSourceContext($name);
         $code = $originalContext->getCode();
         $path = $originalContext->getPath();
