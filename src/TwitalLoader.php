@@ -11,7 +11,7 @@ use Goetas\Twital\SourceAdapter\XMLAdapter;
  *
  * @author Asmir Mustafic <goetas@gmail.com>
  */
-class TwitalLoader implements \Twig\LoaderInterface, \Twig\ExistsLoaderInterface, \Twig\SourceContextLoaderInterface
+class TwitalLoader implements \Twig\Loader\LoaderInterface, \Twig\Loader\ExistsLoaderInterface, \Twig\Loader\SourceContextLoaderInterface
 {
     /**
      * Array of patterns used to decide if a template is twital-compilable or not.
